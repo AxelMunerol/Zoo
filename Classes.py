@@ -1,4 +1,6 @@
 prédateur = ["lion","tigre",'politique','pretre']
+#Mettre ses prédateurs à sa volonté
+
 class Zoo:
     def __init__(self):
         self.nbcages = 0
