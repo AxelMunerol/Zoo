@@ -1,21 +1,31 @@
 from Classes import Zoo,Cage,Animal
 
 zoo_des_fous = Zoo()
+cont = "Yes"
 
-cage_des_lions = Cage("Cage des lions")
-cage_des_oiseaux = Cage("Cage des oiseaux")
+while True:
+    action = input('Voulez-vous ajouter une [cage] ou un [animal] ? ([Quitter] pour sortir) : ').lower()
+    if action in ["cage",'zone']:
+        nom = input("nom de la cage ? ")
+        zoo_des_fous.add_cage(Cage(nom))
 
-martin = Animal("Martin", "Lion")
-luc = Animal("Luc", "Lion")
-steven = Animal("Steven", "Tigre")
-fredo = Animal("Fredo","Grue")
-cage_des_lions.add_animal(martin)
-cage_des_lions.add_animal(luc)
-cage_des_lions.add_animal(steven)
-cage_des_oiseaux.add_animal(fredo)
 
-zoo_des_fous.add_cage(cage_des_oiseaux)
-zoo_des_fous.add_cage(cage_des_lions)
+    elif action in ["animal", "bebou"]:
+        nom_cage = input("Nom de la cage où placer l'animal : ")
+        cage_cible = zoo_des_fous.get_cage_by_name(nom_cage)
+        if cage_cible:
+            nom_animal = input("Nom de l'animal : ")
+            espece_animal = input("Espèce de l'animal : ")
+            cage_cible.add_animal(Animal(nom_animal, espece_animal))
+            print(f"{nom_animal} ajouté à la cage {nom_cage}.")
+        else:
+            print("Cage introuvable.")
+
+
+    elif action in ["quitter", "exit"]:
+        break
+    else:
+        print('pas compris')
+
+
 print(zoo_des_fous)
-print(martin)
-print(cage_des_lions)
