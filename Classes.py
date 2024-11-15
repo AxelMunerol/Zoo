@@ -1,5 +1,8 @@
-prédateur = ["lion","tigre",'politique','pretre']
-#Mettre ses prédateurs à sa volonté
+
+import random
+
+prédateur = ["lion", "tigre", 'politique', 'pretre', 'loup']
+
 
 class Zoo:
     def __init__(self):
@@ -15,16 +18,13 @@ class Zoo:
 
     def __str__(self):
         noms_cages = ", ".join([cage.nom for cage in self.cages])
-        cages_liste = "\n\n".join([str(cage) for cage in self.cages])  # Double saut de ligne entre les cages
-        return ("\n\n"
-            f"Total : {self.nbcages} cage(s)"
-            f"\nListe des cages dans le zoo : {noms_cages}\n\n"
-            f"{cages_liste}"
-        )
+        cages_liste = "\n\n".join([str(cage) for cage in self.cages])
+        return f"\nTotal : {self.nbcages} cage(s)\nListe des cages dans le zoo : {noms_cages}\n\n{cages_liste}"
+
 class Cage:
     def __init__(self, nom):
-        self.animaux = {}  # Compte des espèces
-        self.liste_animaux = []  # Liste des instances d'Animal
+        self.animaux = {}
+        self.liste_animaux = []
         self.nom = nom
 
     def add_animal(self, animal):
@@ -45,19 +45,40 @@ class Cage:
                 self.animaux[animal.espece] = 1
             self.liste_animaux.append(animal)
 
+    def carnage(self):
+        global total_individus
+        prédateurs_in_cage = [animal.nom for animal in self.liste_animaux if animal.espece in prédateur]
+        proies_in_cage = [animal.nom for animal in self.liste_animaux if animal.espece not in prédateur]
 
+        if prédateurs_in_cage and proies_in_cage:
+            tueur = random.choice(prédateurs_in_cage)
+            tué = random.choice(proies_in_cage)
+            print(f"Le carnage... {tueur} a dévoré {tué}.")
+
+
+            animal_tué = next((animal for animal in self.liste_animaux if animal.nom == tué), None)
+            if animal_tué:
+                self.liste_animaux.remove(animal_tué)
+                total_individus = sum(self.animaux.values())-1
+
+        else:
+            total_individus = sum(self.animaux.values())
+            print(f"Il n'y a pas eu de carnage dans cette cage : {self.nom}")
 
     def __str__(self):
+        # Calcul du total des individus dans la cage après carnage
+
+
         liste_animaux = ", ".join([f"{espece} ({count})" for espece, count in self.animaux.items()])
         noms_individuels = ", ".join([f"{animal.nom} ({animal.espece})" for animal in self.liste_animaux])
-        nbr_total = sum(self.animaux.values())
         return (
             f"Dans votre super prison pour les animaux il y a : \n"
             f"Voici la liste des animaux dans la cage '{self.nom}':\n"
-            f"Espèces : {liste_animaux}\n"
+            f"Espèces affichées devant la cage (comprenant les animaux morts) : {liste_animaux}\n"
             f"Noms : {noms_individuels}\n"
-            f"Total : {nbr_total} individu(s)."
+            f"Total : {total_individus} individu(s)."
         )
+
 
 class Animal:
     def __init__(self, nom, espece):
@@ -66,5 +87,4 @@ class Animal:
 
     def __str__(self):
         return f"Cet animal s'appelle {self.nom} et est un.e {self.espece}"
-
 
