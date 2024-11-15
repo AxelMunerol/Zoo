@@ -1,6 +1,8 @@
+
 import random
 
 prédateur = ["lion", "tigre", 'politique', 'pretre', 'loup']
+
 
 class Zoo:
     def __init__(self):
